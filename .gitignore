@@ -205,3 +205,27 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+ 
+#  Logs & archives
+*.log
+*.zip
+
+#  Environment & configuration
+.env
+*.json           
+
+#  Build artifacts
+*.o
+*.class
+logs/
+
+#  Documents
+*.pdf
+*.docx
+*.txt
+
+
+# local pgvector development DB data
+pgvector_db/
