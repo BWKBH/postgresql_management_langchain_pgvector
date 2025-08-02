@@ -3,7 +3,7 @@ from langchain_postgres.v2.async_vectorstore import AsyncPGVectorStore
 from typing import Any, Optional, Sequence
 from sqlalchemy import RowMapping, text
 from langchain_postgres.v2.hybrid_search_config import HybridSearchConfig
-import re
+
 class AsyncPGVectorStoreBM25(AsyncPGVectorStore):
     async def _AsyncPGVectorStore__query_collection(
         self,
