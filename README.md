@@ -46,7 +46,7 @@ await controller.set_pgvector(...)
 retriever = controller.vector_store.as_retriever()
 docs = await retriever.ainvoke("한국어 문법에 대해 알려줘", k=4)
 ```
-See more usage in [`test_pgvector_controller.ipynb`](.test_pgvector_controller.ipynb).
+See more usage in [`test_pgvector_controller.ipynb`](https://github.com/BWKBH/langchain_pgvector_searchkit/blob/main/test_pgvector_controller.ipynb).
 
 ## Project Structure
 ```text
