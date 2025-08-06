@@ -50,10 +50,9 @@ See more usage in [`test_pgvector_controller.py`](.test_pgvector_controller.py).
 
 ## 📁 Project Structure
 
-<details> <summary>Click to expand</summary>
-langchain_pgvector_searchkit/
+langchain_pgvector_searchkit
 │
 ├── service/         # PGVectorController and DB management
 ├── db/              # Hybrid BM25 logic and vector store overrides
 └── rrf/             # RRF ranking functions
-</details> ```
+
