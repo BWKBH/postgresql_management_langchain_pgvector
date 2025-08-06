@@ -60,11 +60,11 @@ class PGVectorController :
 
     
     async def aconnect_to_postgres_sql_db(self
-        , host: str = None
-        , port: int = None
-        , user: str = None
-        , password: str = None
-        , dbname: str = None):
+        , host: str 
+        , port: int 
+        , user: str 
+        , password: str 
+        , dbname: str) :
         
         self.connection = await asyncpg.connect(
             host=host
