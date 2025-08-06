@@ -24,5 +24,36 @@ After installing the extensions, connect to your PostgreSQL instance and run:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS pg_search; 
-'''
+CREATE EXTENSION IF NOT EXISTS pg_search;
+```
+
+
+
+## Features
+- Seamless integration with PostgreSQL + pgvector
+- Hybrid search support with BM25 + vector (Reciprocal Rank Fusion)
+- Support for HNSW indexing and distance strategy configuration
+- Easy control over DB schema, index creation, and deletion
+- LangChain-compatible retriever for use in RAG pipelines 
+
+## Quick Usage Example
+
+```python
+from langchain_pgvector_searchkit import PGVectorController
+
+controller = PGVectorController(...)
+await controller.set_pgvector(...)
+retriever = controller.vector_store.as_retriever()
+docs = await retriever.ainvoke("한국어 문법에 대해 알려줘", k=4)
+```
+See more usage in [`test_pgvector_controller.py`](.test_pgvector_controller.py).
+
+## 📁 Project Structure
+
+<details> <summary>Click to expand</summary>
+langchain_pgvector_searchkit/
+│
+├── service/         # PGVectorController and DB management
+├── db/              # Hybrid BM25 logic and vector store overrides
+└── rrf/             # RRF ranking functions
+</details> ```
