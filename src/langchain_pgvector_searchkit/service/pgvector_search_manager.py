@@ -6,9 +6,9 @@ import subprocess
 import os
 import signal
 from langchain_postgres.v2.hybrid_search_config import HybridSearchConfig
-from rrf.rrf_weighted_sum import hybrid_search_rrf_weighted_sum
+from langchain_pgvector_searchkit.rrf.rrf_weighted_sum import hybrid_search_rrf_weighted_sum
 import math
-from db.hybridsearch_bm25 import AsyncPGVectorStoreBM25
+from langchain_pgvector_searchkit.db.hybridsearch_bm25 import AsyncPGVectorStoreBM25
 import asyncpg
 import signal
 from typing import Dict
