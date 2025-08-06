@@ -2,23 +2,22 @@ from langchain_postgres.v2.indexes import HNSWIndex, DistanceStrategy
 from langchain_postgres.v2.engine import PGEngine
 from sqlalchemy import text
 from langchain_huggingface import HuggingFaceEmbeddings
-import psycopg2
 import subprocess
 import os
 import signal
 from langchain_postgres.v2.hybrid_search_config import HybridSearchConfig
-from rrf_weighted_sum import hybrid_search_rrf_weighted_sum
+from rrf.rrf_weighted_sum import hybrid_search_rrf_weighted_sum
 import math
-from hybridsearch_bm25 import AsyncPGVectorStoreBM25
+from db.hybridsearch_bm25 import AsyncPGVectorStoreBM25
 import asyncpg
 import signal
-
+from typing import Dict
 class PGVectorController :
     def __init__(self
-        ,embedding_model_name="nlpai-lab/KURE-v1"
-        , model_kwargs={"device": "cpu"}
-        , encode_kwargs={"normalize_embeddings": True}
-        , model_type = "HuggingFaceEmbeddings") :
+        ,embedding_model_name : str ="nlpai-lab/KURE-v1"
+        , model_kwargs : Dict = {"device": "cpu"}
+        , encode_kwargs : Dict ={"normalize_embeddings": True}
+        , model_type : str = "HuggingFaceEmbeddings") :
         self.embedding_model=self.set_embedding_model(
                  model_name=embedding_model_name
                 , model_kwargs=model_kwargs
@@ -34,10 +33,10 @@ class PGVectorController :
         self.retrieval=None
 
     def set_embedding_model(self
-        , model_name="nlpai-lab/KURE-v1"
-        , model_kwargs={"device": "cpu"}
-        , encode_kwargs={"normalize_embeddings": True}
-        , model_type = "HuggingFaceEmbeddings"):
+        , model_name : str
+        , model_kwargs : Dict = {"device": "cpu"}
+        , encode_kwargs : Dict = {"normalize_embeddings": True}
+        , model_type : str =  "HuggingFaceEmbeddings"):
         if model_type=="HuggingFaceEmbeddings":
             return HuggingFaceEmbeddings(
                  model_name=model_name
@@ -46,10 +45,10 @@ class PGVectorController :
             )
 
     def serve_postgres(self,
-        postgresDB_path = "/usr/lib/postgresql/16/bin/postgres" 
-        , data_directory = "/home/kbh/Desktop/ssami/pgvector_db/malssami_pg_data"
-        , port = "5434"
-        , socket_directory = "/home/kbh/Desktop/ssami/pgvector_db/malssami_pg_data"
+        postgresDB_path : str 
+        , data_directory : str
+        , port : str
+        , socket_directory : str
         ):
             self.postgres_server = subprocess.Popen([
                     postgresDB_path ,
@@ -61,11 +60,11 @@ class PGVectorController :
 
     
     async def aconnect_to_postgres_sql_db(self
-        , host: str = "localhost"
-        , port: int = 5434
-        , user: str = "malssami_admin"
-        , password: str = "ssami"
-        , dbname: str = "postgres"):
+        , host: str = None
+        , port: int = None
+        , user: str = None
+        , password: str = None
+        , dbname: str = None):
         
         self.connection = await asyncpg.connect(
             host=host
@@ -170,9 +169,9 @@ class PGVectorController :
                 print("Forced connection termination and server shutdown were both canceled.")
         
 
-    async def set_pgvector(
+    async def aset_pgvector(
         self,
-        table_name: str = "korean_grammer",
+        table_name: str = "",
         metadata_columns: list[str] = []
         , hybridsearch = True
         , vector_rrf_k : int = 20
@@ -230,7 +229,7 @@ class PGVectorController :
         return self.vector_store
     
 
-    async def create_pgvector_table(self
+    async def acreate_pgvector_table(self
     , table_name: str = "langchain_pg_embedding"
     , vector_dimension: int = 1024
     , metadata_columns: list[str] = []
@@ -282,7 +281,7 @@ class PGVectorController :
         except Exception as e:
             print(f"Error while deleting records via SQL: {e}")
     
-    async def abuild_hnsw_index(self
+    async def acreate_hnsw_index(self
         , table_name : str = None
         , index_name: str = None
         , calc_distance: str = "vector_cosine_ops"  # or vector_ip_ops, vector_l2_ops
@@ -323,7 +322,7 @@ class PGVectorController :
             print(f"Error occurred while deleting HNSW index: {e}")
 
     
-    async def abuild_bm25_index(self
+    async def acreate_bm25_index(self
         , table_name: str):
         if self.connection is None:
             print("PostgreSQL connection is not established. Please call aconnect_to_postgres_sql_db() first.")
