@@ -48,11 +48,12 @@ docs = await retriever.ainvoke("한국어 문법에 대해 알려줘", k=4)
 ```
 See more usage in [`test_pgvector_controller.py`](.test_pgvector_controller.py).
 
-## 📁 Project Structure
-
-langchain_pgvector_searchkit
+## Project Structure
+```text
+langchain_pgvector_searchkit/
 │
 ├── service/         # PGVectorController and DB management
 ├── db/              # Hybrid BM25 logic and vector store overrides
 └── rrf/             # RRF ranking functions
+```
 
