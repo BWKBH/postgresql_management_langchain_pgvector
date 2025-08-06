@@ -9,8 +9,7 @@ git clone https://github.com/BWKBH/langchain_pgvector_searchkit.git
 cd langchain_pgvector_searchkit
 pip install -e .
 pip install -r requirements.txt
-
-
+```
 ## Install Required PostgreSQL Extensions
 
 This project depends on the following PostgreSQL extensions:
@@ -25,4 +24,5 @@ After installing the extensions, connect to your PostgreSQL instance and run:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS pg_search;
+CREATE EXTENSION IF NOT EXISTS pg_search; 
+'''
