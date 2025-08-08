@@ -12,6 +12,8 @@ from langchain_pgvector_searchkit.db.hybridsearch_bm25 import AsyncPGVectorStore
 import asyncpg
 import signal
 from typing import Dict
+from langchain_core.embeddings import Embeddings
+from typing import Self
 class PGVectorController :
     def __init__(self
         ,embedding_model_name : str ="nlpai-lab/KURE-v1"
@@ -36,7 +38,7 @@ class PGVectorController :
         , model_name : str
         , model_kwargs : Dict = {"device": "cpu"}
         , encode_kwargs : Dict = {"normalize_embeddings": True}
-        , model_type : str =  "HuggingFaceEmbeddings"):
+        , model_type : str =  "HuggingFaceEmbeddings") -> Embeddings :
         if model_type=="HuggingFaceEmbeddings":
             return HuggingFaceEmbeddings(
                  model_name=model_name
@@ -49,7 +51,7 @@ class PGVectorController :
         , data_directory : str
         , port : str
         , socket_directory : str
-        ):
+        ) -> Self:
             self.postgres_server = subprocess.Popen([
                     postgresDB_path ,
                     "-D", data_directory ,
@@ -64,7 +66,7 @@ class PGVectorController :
         , port: int 
         , user: str 
         , password: str 
-        , dbname: str) :
+        , dbname: str) -> Self:
         
         self.connection = await asyncpg.connect(
             host=host
@@ -180,7 +182,7 @@ class PGVectorController :
         , bm25_distance_weight : int = 0.5
         , top_k : int = 5
         , vector_store_cls = AsyncPGVectorStoreBM25
-    ):
+    ) -> AsyncPGVectorStoreBM25 :
         try:
             engine = PGEngine.from_connection_string(self.aconnection_url)
             print("PGEngine initialized")
@@ -233,7 +235,7 @@ class PGVectorController :
     , table_name: str = "langchain_pg_embedding"
     , vector_dimension: int = 1024
     , metadata_columns: list[str] = []
-    ):
+    ) -> None:
         columns_sql = ""
         for col in metadata_columns:
             columns_sql += f", {col} TEXT" 
@@ -257,7 +259,8 @@ class PGVectorController :
 
 
     async def adrop_pgvector_table(self
-        , table_name: str = "langchain_pg_embedding"):
+        , table_name: str = "langchain_pg_embedding"
+    ) -> None:
         if self.connection is None:
             print("PostgreSQL connection is not established. Please call aconnect_to_postgres_sql_db() first.")
             return
@@ -270,7 +273,8 @@ class PGVectorController :
 
 
     async def adelete_all_docs(self
-        , table_name: str = "langchain_pg_embedding"):
+        , table_name: str = "langchain_pg_embedding"
+    ) -> None:
         if self.connection is None:
             print("PostgreSQL connection is not established. Please call aconnect_to_postgres_sql_db() first.")
             return
@@ -287,7 +291,7 @@ class PGVectorController :
         , calc_distance: str = "vector_cosine_ops"  # or vector_ip_ops, vector_l2_ops
         , m: int = 16
         , ef_construction: int = 100,
-    ):
+    ) -> None:
         if calc_distance not in ["vector_ip_ops", "vector_cosine_ops", "vector_l2_ops"]:
             raise ValueError("Invalid calc_distance operator")
         index_name=table_name+"_hnsw_index"
@@ -309,7 +313,8 @@ class PGVectorController :
         print(f"HNSW index '{index_name}' created successfully ({calc_distance})")
 
     async def adrop_hnsw_index(self
-        , table_name: str):
+        , table_name: str
+    ) -> None:
         if self.connection is None:
             print("PostgreSQL connection is not established. Please call aconnect_to_postgres_sql_db() first.")
             return
@@ -323,7 +328,8 @@ class PGVectorController :
 
     
     async def acreate_bm25_index(self
-        , table_name: str):
+        , table_name: str
+    ) -> None:
         if self.connection is None:
             print("PostgreSQL connection is not established. Please call aconnect_to_postgres_sql_db() first.")
             return
@@ -355,7 +361,8 @@ class PGVectorController :
 
 
     async def adrop_bm25_index(self
-        , table_name: str):
+        , table_name: str
+    ) -> None :
         if self.connection is None:
             print("PostgreSQL connection is not established. Please call aconnect_to_postgres_sql_db() first.")
             return
@@ -370,7 +377,8 @@ class PGVectorController :
 
     async def acount_docs(self
         , schema: str = "public"
-        , table_name: str = None) -> int:
+        , table_name: str = None
+    ) -> int:
         table = table_name or self.vector_store.table_name
         full_table = f'{schema}.{table}'             
         async with self.vector_store.engine.connect() as conn: 
