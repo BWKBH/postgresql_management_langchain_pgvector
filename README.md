@@ -5,7 +5,7 @@ Hybrid BM25-powered search &amp; DB management toolkit for PostgreSQL/pgvector w
 ## install
 
 ```bash
-git clone https://github.com/BWKBH/langchain_pgvector_searchkit.git
+git clone https://github.com/BWKBH/postgresql_management_langchain_pgvector.git
 cd langchain_pgvector_searchkit
 pip install -e .
 pip install -r requirements.txt
