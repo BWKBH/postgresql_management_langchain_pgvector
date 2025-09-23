@@ -1,0 +1,25 @@
+# LLM/RAG, ML 
+torch==2.7.0
+transformers==4.52.4
+sentence-transformers==4.1.0
+
+# Vector DB & Postgres 
+pgvector==0.3.6
+asyncpg==0.30.0
+SQLAlchemy==2.0.41
+
+
+# LangChain & LangGraph
+langchain==0.3.25
+langchain-core==0.3.66
+langchain-huggingface==0.3.0
+langchain-postgres==0.0.15
+langgraph==0.4.8
+langgraph-checkpoint==2.0.26
+langgraph-prebuilt==0.2.2
+langgraph-sdk==0.1.70
+langsmith==0.3.45
+
+# 기타
+tqdm==4.67.1
+rich==14.0.0

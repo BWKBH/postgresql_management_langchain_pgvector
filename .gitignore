@@ -225,7 +225,7 @@ logs/
 *.pdf
 *.docx
 *.txt
-
+!requirements.txt
 
 # local pgvector development DB data
 pgvector_db/
